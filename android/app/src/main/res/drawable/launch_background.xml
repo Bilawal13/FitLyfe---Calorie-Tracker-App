@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 1. Your app's background color -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#ffffff"/> <!-- Change to your theme's background color -->
+        </shape>
+    </item>
+
+    <!-- 2. Your app icon centered instantly by Android -->
+    <item android:gravity="center">
+        <bitmap
+            android:src="@mipmap/launcher_icon"
+            android:gravity="center"/>
+    </item>
+</layer-list>

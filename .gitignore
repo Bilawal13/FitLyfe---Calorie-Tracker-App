@@ -1,0 +1,118 @@
+# ==========================================
+# Sensitive & Secret Files (DO NOT LEAK)
+# ==========================================
+# Keystores & Signing Keys
+*.keystore
+*.jks
+**/upload-keystore.jks
+key.properties
+**/key.properties
+
+# Passwords, Secrets, & Credentials
+imp/
+key.txt
+**/key.txt
+*credential*
+*secret*
+*.pem
+*.p12
+*.pfx
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Local Machine SDK Paths
+local.properties
+**/local.properties
+
+# Firebase / Cloud Service Credentials
+**/google-services.json
+**/GoogleService-Info.plist
+
+# ==========================================
+# Flutter / Dart
+# ==========================================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+build/
+**/build/
+coverage/
+**/coverage/
+**/doc/api/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/app.framework
+
+# Symbolication & Obfuscation
+app.*.symbols
+app.*.map.json
+
+# ==========================================
+# Android
+# ==========================================
+.gradle/
+**/.gradle/
+/android/app/debug/
+/android/app/profile/
+/android/app/release/
+/android/captures/
+.cxx/
+**/.cxx/
+GeneratedPluginRegistrant.java
+**/GeneratedPluginRegistrant.java
+*.apk
+*.aab
+*.ap_
+
+# ==========================================
+# Node.js / Backend
+# ==========================================
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ==========================================
+# Databases & Local Data
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+
+# ==========================================
+# IDEs and Editors
+# ==========================================
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# ==========================================
+# Operating System & Temp Files
+# ==========================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+[Dd]esktop.ini
+*.class
+*.log
+*.pyc
+*.swp
+*.bak
+.atom/
+.history
+.svn/
