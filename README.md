@@ -1,57 +1,56 @@
-# Calorie Tracker — Flutter App
+Fit Lyfe | Smart Calorie & Nutrition Tracker 🥗📊
+Fit Lyfe is a feature-rich, privacy-focused mobile application built with Flutter designed to make calorie tracking, meal planning, and health monitoring effortless, engaging, and lightning-fast.
 
-A dark-green calorie tracker with AI nutrition assistant and light/dark theme support.
+Whether your goal is to lose weight, build muscle, or maintain a balanced lifestyle, Fit Lyfe provides all the tools you need right on your device.
 
-## Features
-- **Home** — Calorie ring, progress bar, macro breakdown (protein, carbs, fat, fiber, sodium), daily log
-- **Meals** — Save meals with full nutritional facts; log them to today
-- **AI Chat** — Ask about any meal, get nutrition estimates, save straight to Meals tab
-- **Settings** — Toggle between System / Light / Dark theme; auto-follows device setting
+✨ Key Features
+Calorie Tracker & Food Log: Effortlessly log daily meals, snacks, and drinks with dynamic smart group emojis (automatically adapting for Breakfast, Lunch, Dinner, Protein, and Drinks) across your logs and screens.
 
-## Setup
+Extensive Food Library: Browse and search a robust database of food items powered by the USDA API to quickly find nutritional breakdowns and add your favorite meals.
 
-### 1. Install Flutter
-https://docs.flutter.dev/get-started/install — then run `flutter doctor`
+Macro Counter: Seamlessly monitor proteins, carbohydrates, and fats to stay precisely on target with your health and fitness goals.
 
-### 2. Get dependencies
-```bash
-cd calorie_tracker
+Gamified Ranking System: Stay motivated throughout your health journey by tracking your progress and leveling up through an engaging rank structure.
+
+Daily Quick Tips: Access bite-sized, actionable health, nutrition, and wellness tips right when you need them to build sustainable habits.
+
+Persistent Undo & Local Backup: Safeguard your data with local storage handling and a reliable 2-hour reset "undo" window that survives app restarts.
+
+Built-in Feedback Mechanism: Easily submit in-app feedback to help continuously improve the app experience.
+
+Local Privacy First: All personal health logs, custom meal lists, and user data remain stored securely right on your device.
+
+📱 Tech Stack & Architecture
+Framework: Flutter & Dart
+
+Data Management: Local storage handling with robust state management and backup protocols
+
+API Integration: USDA API injected securely during builds via --dart-define
+
+UI/UX: Clean, distraction-free design with responsive layouts and dynamic visual indicators
+
+🚀 Getting Started (Development Setup)
+To run this project locally, make sure you have the Flutter SDK installed.
+
+Clone the repository:
+
+Bash
+git clone https://github.com/your-username/fit-lyfe.git
+cd fit-lyfe
+Install dependencies:
+
+Bash
 flutter pub get
-```
+Run the app (injecting your USDA API key):
 
-### 3. Add your Anthropic API key
-Open `lib/services/ai_service.dart` and replace the placeholder:
-```dart
-'x-api-key': 'YOUR_API_KEY_HERE',
-```
-Get a key at https://console.anthropic.com
+Bash
+flutter run --dart-define=USDA_API_KEY=your_actual_api_key_here
+📦 Build & Release
+To generate an optimized Android App Bundle (.aab) for testing or deployment:
 
-### 4. Run
-```bash
-# Any connected device / emulator
-flutter run
+Bash
+flutter build appbundle --dart-define=USDA_API_KEY=your_actual_api_key_here
+🛡️ Privacy & Security
+Fit Lyfe is built with privacy at its core. No personal health metrics or tracking logs are sent to external third-party servers; everything stays local to your device.
 
-# Release APK for Android
-flutter build apk --release
-# → build/app/outputs/flutter-apk/app-release.apk
-
-# iOS (Mac only)
-flutter build ios --release
-```
-
-## Project structure
-```
-lib/
-├── main.dart                    # Entry point, state, shell
-├── models/
-│   └── meal.dart                # Meal + LoggedMeal models
-├── screens/
-│   ├── home_screen.dart         # Calorie ring + macros
-│   ├── meals_screen.dart        # Saved meals + Add dialog
-│   ├── ai_chat_screen.dart      # AI chatbot
-│   └── settings_screen.dart     # Theme switcher + about
-└── services/
-    ├── theme_provider.dart      # ThemeProvider + color palettes
-    ├── storage_service.dart     # SharedPreferences persistence
-    └── ai_service.dart          # Anthropic API integration
-```
+Code. Create. Automate.
