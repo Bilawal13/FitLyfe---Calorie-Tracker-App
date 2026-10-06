@@ -3,6 +3,7 @@ Fit Lyfe is a feature-rich, privacy-focused mobile application built with Flutte
 
 Whether your goal is to lose weight, build muscle, or maintain a balanced lifestyle, Fit Lyfe provides all the tools you need right on your device.
 
+
 ✨ Key Features
 Calorie Tracker & Food Log: Effortlessly log daily meals, snacks, and drinks with dynamic smart group emojis (automatically adapting for Breakfast, Lunch, Dinner, Protein, and Drinks) across your logs and screens.
 
@@ -19,6 +20,7 @@ Persistent Undo & Local Backup: Safeguard your data with local storage handling 
 Built-in Feedback Mechanism: Easily submit in-app feedback to help continuously improve the app experience.
 
 Local Privacy First: All personal health logs, custom meal lists, and user data remain stored securely right on your device.
+
 
 📱 Tech Stack & Architecture
 Framework: Flutter & Dart
@@ -45,11 +47,15 @@ Run the app (injecting your USDA API key):
 
 Bash
 flutter run --dart-define=USDA_API_KEY=your_actual_api_key_here
+
+
 📦 Build & Release
 To generate an optimized Android App Bundle (.aab) for testing or deployment:
 
 Bash
 flutter build appbundle --dart-define=USDA_API_KEY=your_actual_api_key_here
+
+
 🛡️ Privacy & Security
 Fit Lyfe is built with privacy at its core. No personal health metrics or tracking logs are sent to external third-party servers; everything stays local to your device.
 
