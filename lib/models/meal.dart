@@ -114,32 +114,177 @@ String getEmojiForGroupName(String groupName) {
 
   if (name.contains('break') ||
       name.contains('egg') ||
-      name.contains('morning')) return '🍳';
+      name.contains('morning')) {
+    return '🍳';
+  }
   if (name.contains('lunch') || name.contains('noon')) return '🥪';
   if (name.contains('dinner') ||
       name.contains('night') ||
-      name.contains('supper')) return '🍲';
-  if (name.contains('snack') || name.contains('bite') || name.contains('treat'))
+      name.contains('supper')) {
+    return '🍲';
+  }
+  if (name.contains('snack') ||
+      name.contains('bite') ||
+      name.contains('treat')) {
     return '🍿';
+  }
   if (name.contains('protein') ||
       name.contains('meat') ||
       name.contains('chicken') ||
       name.contains('beef') ||
-      name.contains('gym')) return '🥩';
+      name.contains('gym')) {
+    return '🥩';
+  }
   if (name.contains('fruit') ||
       name.contains('apple') ||
-      name.contains('berry')) return '🍎';
-  if (name.contains('veg') || name.contains('salad') || name.contains('green'))
+      name.contains('berry')) {
+    return '🍎';
+  }
+  if (name.contains('veg') ||
+      name.contains('salad') ||
+      name.contains('green')) {
     return '🥗';
+  }
   if (name.contains('drink') ||
       name.contains('shake') ||
       name.contains('water') ||
       name.contains('juice') ||
-      name.contains('coffee')) return '🥤';
+      name.contains('coffee')) {
+    return '🥤';
+  }
   if (name.contains('sweet') ||
       name.contains('dessert') ||
       name.contains('sugar') ||
-      name.contains('cake')) return '🍩';
+      name.contains('cake')) {
+    return '🍩';
+  }
 
   return '🍽️'; // Default food emoji fallback
+}
+
+
+class LoggedExercise {
+  final String id;
+  final String title;
+  final String icon;
+  final double caloriesBurned;
+  final int durationMinutes;
+  final DateTime loggedAt;
+
+  LoggedExercise({
+    required this.id,
+    required this.title,
+    this.icon = '🔥',
+    required this.caloriesBurned,
+    this.durationMinutes = 0,
+    DateTime? loggedAt,
+  }) : loggedAt = loggedAt ?? DateTime.now();
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'icon': icon,
+        'caloriesBurned': caloriesBurned,
+        'durationMinutes': durationMinutes,
+        'loggedAt': loggedAt.toIso8601String(),
+      };
+
+  factory LoggedExercise.fromJson(Map<String, dynamic> json) => LoggedExercise(
+        id: json['id']?.toString() ??
+            DateTime.now().millisecondsSinceEpoch.toString(),
+        title: json['title']?.toString() ?? 'Exercise',
+        icon: json['icon']?.toString() ?? '🔥',
+        caloriesBurned: (json['caloriesBurned'] as num?)?.toDouble() ?? 0.0,
+        durationMinutes: (json['durationMinutes'] as num?)?.toInt() ?? 0,
+        loggedAt: json['loggedAt'] != null
+            ? DateTime.tryParse(json['loggedAt']) ?? DateTime.now()
+            : DateTime.now(),
+      );
+}
+
+class DailySummary {
+  final String date; // YYYY-MM-DD
+  final double calories;
+  final double protein;
+  final double carbs;
+  final double fat;
+  final double fiber;
+  final double sodium;
+  final int mealCount;
+  final int goal;
+  final int waterIntake; // in ml
+  final double burnedCalories; // in kcal
+
+  DailySummary({
+    required this.date,
+    required this.calories,
+    required this.protein,
+    required this.carbs,
+    required this.fat,
+    required this.fiber,
+    required this.sodium,
+    required this.mealCount,
+    required this.goal,
+    this.waterIntake = 0,
+    this.burnedCalories = 0.0,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'date': date,
+        'calories': calories,
+        'protein': protein,
+        'carbs': carbs,
+        'fat': fat,
+        'fiber': fiber,
+        'sodium': sodium,
+        'mealCount': mealCount,
+        'goal': goal,
+        'waterIntake': waterIntake,
+        'burnedCalories': burnedCalories,
+      };
+
+  factory DailySummary.fromJson(Map<String, dynamic> json) => DailySummary(
+        date: json['date']?.toString() ?? '',
+        calories: (json['calories'] as num?)?.toDouble() ?? 0.0,
+        protein: (json['protein'] as num?)?.toDouble() ?? 0.0,
+        carbs: (json['carbs'] as num?)?.toDouble() ?? 0.0,
+        fat: (json['fat'] as num?)?.toDouble() ?? 0.0,
+        fiber: (json['fiber'] as num?)?.toDouble() ?? 0.0,
+        sodium: (json['sodium'] as num?)?.toDouble() ?? 0.0,
+        mealCount: (json['mealCount'] as num?)?.toInt() ?? 0,
+        goal: (json['goal'] as num?)?.toInt() ?? 2000,
+        waterIntake: (json['waterIntake'] as num?)?.toInt() ?? 0,
+        burnedCalories: (json['burnedCalories'] as num?)?.toDouble() ?? 0.0,
+      );
+
+  factory DailySummary.fromLogs({
+    required String date,
+    required List<LoggedMeal> logs,
+    required int goal,
+    int waterIntake = 0,
+    double burnedCalories = 0.0,
+  }) {
+    double cal = 0, p = 0, c = 0, f = 0, fib = 0, sod = 0;
+    for (final l in logs) {
+      cal += l.meal.calories;
+      p += l.meal.protein;
+      c += l.meal.carbs;
+      f += l.meal.fat;
+      fib += l.meal.fiber;
+      sod += l.meal.sodium;
+    }
+    return DailySummary(
+      date: date,
+      calories: cal,
+      protein: p,
+      carbs: c,
+      fat: f,
+      fiber: fib,
+      sodium: sod,
+      mealCount: logs.length,
+      goal: goal,
+      waterIntake: waterIntake,
+      burnedCalories: burnedCalories,
+    );
+  }
 }

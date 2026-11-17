@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/theme_provider.dart';
+import '../services/language_provider.dart';
 
 class QuickTipsScreen extends StatelessWidget {
   const QuickTipsScreen({super.key});
@@ -8,6 +9,7 @@ class QuickTipsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeProvider = context.watch<ThemeProvider>();
+    final lang = context.watch<LanguageProvider>();
     final platformDark =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
     final isDark = themeProvider.mode == AppThemeMode.system
@@ -21,7 +23,7 @@ class QuickTipsScreen extends StatelessWidget {
         backgroundColor: c.bg,
         elevation: 0,
         iconTheme: IconThemeData(color: c.textPrimary),
-        title: Text('Quick Tips',
+        title: Text(lang.t('quick_tips'),
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -31,7 +33,7 @@ class QuickTipsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         children: [
           Text(
-            'Master Your Nutrition Tracking',
+            lang.t('quick_tips_title'),
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w600,
@@ -40,39 +42,35 @@ class QuickTipsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            'Use these pro tips to measure calories accurately and make tracking effortless.',
+            lang.t('quick_tips_subtitle'),
             style: TextStyle(fontSize: 13, color: c.textMuted),
           ),
           const SizedBox(height: 20),
           _TipCard(
             icon: Icons.label_outline_rounded,
-            title: 'Check Labels & Serving Sizes',
-            description:
-                'Always read the nutritional breakdown on packaging carefully. Double-check the serving size so you never accidentally log a fraction of what you actually eat.',
+            title: lang.t('tip1_title'),
+            description: lang.t('tip1_desc'),
             c: c,
           ),
           const SizedBox(height: 14),
           _TipCard(
             icon: Icons.scale_rounded,
-            title: 'Weigh & Consult AI',
-            description:
-                'Place fresh or unlabelled foods on a kitchen scale in grams. Ask any AI model or database for precise macro values, then save them to your app for quick logging.',
+            title: lang.t('tip2_title'),
+            description: lang.t('tip2_desc'),
             c: c,
           ),
           const SizedBox(height: 14),
           _TipCard(
             icon: Icons.opacity_rounded,
-            title: 'Account for Hidden Oils & Sauces',
-            description:
-                'Cooking oils, butter, and dressings add up fast. Measure your cooking fats with a spoon rather than eyeballing them to keep your tracking accurate.',
+            title: lang.t('tip3_title'),
+            description: lang.t('tip3_desc'),
             c: c,
           ),
           const SizedBox(height: 14),
           _TipCard(
             icon: Icons.restaurant_rounded,
-            title: 'Weigh Consistently (Raw vs. Cooked)',
-            description:
-                'Meats and grains change weight when cooked due to water loss or absorption. Stick to weighing items either entirely raw or entirely cooked for reliable daily data.',
+            title: lang.t('tip4_title'),
+            description: lang.t('tip4_desc'),
             c: c,
           ),
         ],

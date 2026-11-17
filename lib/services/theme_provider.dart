@@ -216,6 +216,9 @@ ThemeData buildTheme(AppColors c) => ThemeData(
           borderSide: BorderSide(color: c.accent, width: 1.5),
         ),
         hintStyle: TextStyle(color: c.textMuted),
+        labelStyle: TextStyle(color: c.textMuted, fontSize: 13),
+        floatingLabelStyle:
+            TextStyle(color: c.accent, fontSize: 13, fontWeight: FontWeight.w600),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(

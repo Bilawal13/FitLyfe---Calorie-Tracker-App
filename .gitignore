@@ -70,6 +70,7 @@ GeneratedPluginRegistrant.java
 *.apk
 *.aab
 *.ap_
+*.zip
 
 # ==========================================
 # Node.js / Backend

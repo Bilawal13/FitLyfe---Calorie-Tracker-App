@@ -5,8 +5,9 @@
         <!-- Show a splash screen on the activity. Automatically removed when
              the Flutter engine draws its first frame -->
 
-        <!-- This makes your app icon show up instantly in the center -->
-        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/launcher_icon</item>
+        <!-- This makes your HD app icon show up instantly in the center without pixelation -->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="android:windowSplashScreenBackground">#121212</item>
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
     <!-- Theme applied to the Android Window as soon as the process has started.

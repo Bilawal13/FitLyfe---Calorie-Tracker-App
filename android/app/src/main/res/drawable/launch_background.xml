@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 1. Your app's background color -->
+    <!-- 1. App background color matching splash theme -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#ffffff"/> <!-- Change to your theme's background color -->
+            <solid android:color="#FFFFFF"/>
         </shape>
     </item>
 
-    <!-- 2. Your app icon centered instantly by Android -->
+    <!-- 2. High-Definition centered splash logo with anti-aliasing -->
     <item android:gravity="center">
         <bitmap
-            android:src="@mipmap/launcher_icon"
-            android:gravity="center"/>
+            android:src="@drawable/splash_logo"
+            android:gravity="center"
+            android:filter="true"
+            android:antialias="true"
+            android:dither="true" />
     </item>
 </layer-list>

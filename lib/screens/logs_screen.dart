@@ -1,14 +1,19 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // Make sure this is imported
 import '../models/meal.dart';
 import '../services/theme_provider.dart';
+import '../services/sound_service.dart';
+import '../services/language_provider.dart';
 
 class LogsScreen extends StatefulWidget {
   final List<LoggedMeal> logs;
   final Function(int) onRemoveLog;
   final VoidCallback onResetDay;
   final VoidCallback? onUndoReset;
+  final VoidCallback? onNavigateToMeals;
+  final VoidCallback? onQuickAdd;
   final AppColors c;
 
   const LogsScreen({
@@ -17,6 +22,8 @@ class LogsScreen extends StatefulWidget {
     required this.onRemoveLog,
     required this.onResetDay,
     this.onUndoReset,
+    this.onNavigateToMeals,
+    this.onQuickAdd,
     required this.c,
   });
 
@@ -137,31 +144,8 @@ class _LogsScreenState extends State<LogsScreen>
 
   // ... (keep your existing _formatDate and build method unchanged)
 
-  String _formatDate(DateTime d) {
-    const days = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday'
-    ];
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec'
-    ];
-    return '${days[d.weekday - 1]}, ${months[d.month - 1]} ${d.day}, ${d.year}';
+  String _formatDate(DateTime d, [String langCode = 'en']) {
+    return AppTranslations.formatDate(d, langCode);
   }
 
   @override
@@ -170,13 +154,17 @@ class _LogsScreenState extends State<LogsScreen>
 
     final c = widget.c;
     final logs = widget.logs;
+    final lang = context.watch<LanguageProvider>();
 
     return Scaffold(
       backgroundColor: c.bg,
       appBar: AppBar(
         backgroundColor: c.bg,
         elevation: 0,
-        title: Text('Activity & Meal Logs',
+        title: Text(
+            lang.isUrdu
+                ? 'سرگرمی اور کھانے کے لاگز'
+                : (lang.isArabic ? 'سجلات النشاط والوجبات' : 'Activity & Meal Logs'),
             style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w600,
@@ -184,9 +172,12 @@ class _LogsScreenState extends State<LogsScreen>
         actions: [
           if (logs.isNotEmpty)
             TextButton.icon(
-              onPressed: _triggerReset,
+              onPressed: () {
+                SoundService.playTap();
+                _triggerReset();
+              },
               icon: Icon(Icons.restart_alt_rounded, size: 16, color: c.danger),
-              label: Text('Reset Day',
+              label: Text(lang.t('reset_day'),
                   style: TextStyle(fontSize: 12, color: c.danger)),
             ),
           const SizedBox(width: 12),
@@ -200,25 +191,72 @@ class _LogsScreenState extends State<LogsScreen>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(_formatDate(DateTime.now()),
+                Text(_formatDate(DateTime.now(), lang.currentLanguage),
                     style: TextStyle(fontSize: 12, color: c.textMuted)),
                 const SizedBox(height: 16),
                 Expanded(
                   child: logs.isEmpty
                       ? Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.list_alt_rounded,
-                                  size: 48, color: c.textMuted),
-                              const SizedBox(height: 12),
-                              Text(
-                                'No meals logged yet today.\nHead over to the Meals tab to log something!',
-                                textAlign: TextAlign.center,
-                                style:
-                                    TextStyle(color: c.textMuted, fontSize: 13),
-                              ),
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.list_alt_rounded,
+                                    size: 48, color: c.textMuted),
+                                const SizedBox(height: 14),
+                                Text(
+                                  lang.t('no_logs_today'),
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: c.textPrimary,
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  lang.isUrdu
+                                      ? 'آج کی کیلوریز، پروٹین اور غذائیت ٹریک کرنے کے لیے کھانا لاگ کریں۔'
+                                      : (lang.isArabic
+                                          ? 'سجل وجباتك اليوم لتتبع السعرات والبروتين والعناصر الغذائية.'
+                                          : 'Log meals to track your calories, protein, and macros for today.'),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: c.textMuted, fontSize: 13),
+                                ),
+                                const SizedBox(height: 20),
+                                if (widget.onQuickAdd != null)
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      SoundService.playTap();
+                                      widget.onQuickAdd!();
+                                    },
+                                    icon: const Icon(Icons.add_rounded,
+                                        size: 18),
+                                    label: Text(lang.t('quick_log_meal')),
+                                    style: ElevatedButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 12),
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                    ),
+                                  ),
+                                if (widget.onNavigateToMeals != null) ...[
+                                  const SizedBox(height: 10),
+                                  TextButton.icon(
+                                    onPressed: () {
+                                      SoundService.playTap();
+                                      widget.onNavigateToMeals!();
+                                    },
+                                    icon: const Icon(
+                                        Icons.restaurant_menu_rounded,
+                                        size: 16),
+                                    label: Text(lang.t('browse_saved_meals')),
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
                         )
                       : ListView.builder(
@@ -260,14 +298,17 @@ class _LogsScreenState extends State<LogsScreen>
                                   ),
                                 ),
                                 Text(
-                                    '${log.meal.calories.toStringAsFixed(1)} kcal',
+                                    '${log.meal.calories % 1 == 0 ? log.meal.calories.toInt() : log.meal.calories.toStringAsFixed(1)} kcal',
                                     style: TextStyle(
                                         fontSize: 13,
                                         color: c.accent,
                                         fontWeight: FontWeight.w600)),
                                 const SizedBox(width: 12),
                                 GestureDetector(
-                                  onTap: () => widget.onRemoveLog(index),
+                                  onTap: () {
+                                    SoundService.playTap();
+                                    widget.onRemoveLog(index);
+                                  },
                                   child: Icon(Icons.close,
                                       size: 18, color: c.danger),
                                 ),
@@ -309,7 +350,7 @@ class _LogsScreenState extends State<LogsScreen>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          "Day's logs reset.",
+                          lang.t('days_logs_reset'),
                           style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w500,
@@ -317,15 +358,22 @@ class _LogsScreenState extends State<LogsScreen>
                         ),
                         const SizedBox(height: 2),
                         Text(
-                          "Expires in ${_getRemainingTimeString()}",
+                          lang.isUrdu
+                              ? "میعاد ختم: ${_getRemainingTimeString()}"
+                              : (lang.isArabic
+                                  ? "ينتهي خلال: ${_getRemainingTimeString()}"
+                                  : "Expires in ${_getRemainingTimeString()}"),
                           style: TextStyle(fontSize: 11, color: c.textMuted),
                         ),
                       ],
                     ),
                     TextButton(
-                      onPressed: _triggerUndo,
+                      onPressed: () {
+                        SoundService.playTap();
+                        _triggerUndo();
+                      },
                       child: Text(
-                        'UNDO',
+                        lang.t('undo'),
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.bold,
